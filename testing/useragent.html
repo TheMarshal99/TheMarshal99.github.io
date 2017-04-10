@@ -11,10 +11,10 @@
 		</style>
     </head>
 	<body>
-		<input type="text" id="UserAgent">
+		<p id="UserAgent"></p>
 
 		<script type="text/javascript">
-			document.getElementById('UserAgent').value = navigator.userAgent;
+			document.getElementById('UserAgent').innerHTML = navigator.userAgent;
 		</script>
 	</body>
 </html>
