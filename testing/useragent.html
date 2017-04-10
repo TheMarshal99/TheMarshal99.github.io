@@ -5,6 +5,8 @@
 			#UserAgent {
 				margin:0px;
 				padding:0px;
+				width: 100%;
+				height: 20%;
 			}
 		</style>
     </head>
@@ -12,9 +14,7 @@
 		<input type="text" id="UserAgent">
 
 		<script type="text/javascript">
-			var ua = document.getElementById('UserAgent');
-			console.log(ua);
-			ua.value = navigator.userAgent;
+			document.getElementById('UserAgent').value = navigator.userAgent;
 		</script>
 	</body>
 </html>
