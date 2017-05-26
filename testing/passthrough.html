@@ -1,0 +1,52 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		       
+		<script type="text/javascript">
+			var _channel = 'Mobile Web';
+			var _feature = null;
+			var _campaign = null;
+			var _data = {};
+
+			(function(b,r,a,n,c,h,_,s,d,k){if(!b[n]||!b[n]._q){for(;s<_.length;)c(h,_[s++]);d=r.createElement(a);d.async=1;d.src="https://cdn.branch.io/branch-latest.min.js";k=r.getElementsByTagName(a)[0];k.parentNode.insertBefore(d,k);b[n]=h}})(window,document,"script","branch",function(b,r){b[r]=function(){b._q.push([r,arguments])}},{_q:[],_v:1},"addListener applyCode banner closeBanner creditHistory credits data deepview deepviewCta first getCode init link logout redeem referrals removeListener sendSMS setBranchViewData setIdentity track validateCode".split(" "), 0);
+
+			branch.init('key_live_kjdTbXKTeqo2bSs985fLRcfgAwgm81ze', function(err, data) {
+				if (err)
+					return;
+
+				// parsed represents the link data from any incoming link.
+				var parsed = data['data_parsed'];
+
+				console.log("Data:");
+				console.log(parsed);
+
+				console.log("Channel: " + parsed['~channel']);
+				console.log("Feature: " + parsed['~feature']);
+				console.log("Campaign: " + parsed['~campaign']);
+
+				_data = parsed['data'] || {};
+				_channel = parsed['~channel'] || _channel;
+				_feature = parsed['~feature'] || _feature;
+				_campaign = parsed['~campaign'] || _campaign;
+
+				console.log("Channel: " + _channel);
+				console.log("Feature: " + _feature);
+				console.log("Campaign: " + _campaign);
+			});
+			
+			branch.deepview(
+			{
+				channel: _channel,
+				feature: _feature,
+				campaign: _campaign,
+				data: _data
+			},
+			{
+				make_new_link: true
+			});
+		</script>
+	</head>
+	<body>
+		<button onclick="branch.deepviewCta()"> Click Me To Test The Link </button>
+	</body>
+</html>
