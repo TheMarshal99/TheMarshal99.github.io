@@ -20,8 +20,11 @@
                     channel: 'website',
                     campaign: 'something relevant to your analytics',
                 	data: {
+                        '$custom_sms_text': 'This is your custom sms message: {{link}}',
                         'cid': getQueryString("cid")
                 	}
+                }, function(err) {
+                    // Handle the error
                 });
             }
 
