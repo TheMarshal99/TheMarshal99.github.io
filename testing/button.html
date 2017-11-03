@@ -2,12 +2,6 @@
 	<head>
 		<script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
       	<script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-
-      	<script type="text/javascript">
-      		$(function() {
-      			$("#button-1").button();
-      		});
-      	</script>
       
 		<script type="text/javascript">
 
@@ -22,19 +16,19 @@
                         '$deeplink_path': 'https://offerup.com/item/detail/370482179/',
                         '$desktop_url': 'https://offerup.com/item/detail/370482179/'
                     }
-                },
-                function(err){
-                    if (err) {
-                        return;
-                    }
-                    $('a.open-in-app').click(function(){
-                        branch.deepviewCta();
-                    });
                 }
             );
         </script>
+        <script type="text/javascript">
+        	$(document).ready(function() {
+        		$('#button-1').click(function() {
+        			branch.deepviewCta();
+        			console.log('Clicked button!');
+        		});
+        	});
+        </script>
 	</head>
 	<body>
-		<button id="button-1">Click Me</button>
+		<input id="button-1" type="button" value="Click Me"/>
 	</body>
 </html>
