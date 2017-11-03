@@ -17,16 +17,22 @@
                         '$desktop_url': 'https://offerup.com/item/detail/370482179/'
                     }
                 }
+                function(err) {
+	        		$('#button-1').click(function() {
+	        			branch.deepviewCta();
+	        			console.log('Clicked button!');
+	        		});
+                }
             );
         </script>
-        <script type="text/javascript">
+        <!-- <script type="text/javascript">
         	$(document).ready(function() {
         		$('#button-1').click(function() {
         			branch.deepviewCta();
         			console.log('Clicked button!');
         		});
         	});
-        </script>
+        </script> -->
 	</head>
 	<body>
 		<input id="button-1" type="button" value="Click Me"/>
