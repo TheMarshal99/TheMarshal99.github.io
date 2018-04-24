@@ -6,6 +6,21 @@
 
 			// Ticketmaster
             branch.init('key_live_kdeVjwCLMEKR8SBDKyLv2ekowxha5Ka2');
+
+            var onWillShow = function(event) {
+            	console.log("Will Show Journey");
+
+            	var bannerIframe = document.getElementById('branch-banner-iframe');
+            	if (bannerIframe) {
+            		console.log("iframe exists!");
+
+            		if (window.getComputedStyle(bannerIframe)) {
+            			console.log("iframe style exists!");
+            		}
+            	})
+            };
+
+            branch.addListener('willShowJourney', onWillShow);
         </script>
 	</head>
 </html>
