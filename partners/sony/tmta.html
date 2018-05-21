@@ -18,10 +18,13 @@
 
 			// Initialize using Live Key
             branch.init('key_live_bdBS8J74awUMZZZfGjMvBiblzBn2szlP', function(err, data) {
-                keyCode.innerHTML = data;
+                keyCode.innerHTML = getCampaignKeyCode("campaignKeyCode");
             });
 
             var sendTMTALink = function() {
+                // Insert phone # validation...
+
+                // Send text
                 branch.sendSMS(getPhoneNumber(),
                 {
                 	data: {
