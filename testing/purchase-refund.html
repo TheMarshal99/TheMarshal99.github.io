@@ -9,7 +9,7 @@
 
 			// Branch Monster Factory
             branch.init('key_live_abhW7l0Pl1pImIor42pUWfeovxdMsSn6');
-            
+
         </script>
         <script type="text/javascript">
         	$(document).ready(function() {
@@ -29,7 +29,7 @@
         				"currency": "USD"
         			};
 
-        			branch.trackCommerceEvent('refund', commerceData, null, function(err, data) {
+        			branch.trackCommerceEvent('purchase', commerceData, null, function(err, data) {
         				console.log(err, data);
         			});
         		});
