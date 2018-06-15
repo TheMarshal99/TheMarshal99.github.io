@@ -2,52 +2,46 @@
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
         <script type="text/javascript">
-            (function(b,r,a,n,c,h,_,s,d,k){if(!b[n]||!b[n]._q){for(;s<_.length;)c(h,_[s++]);d=r.createElement(a);d.async=1;d.src="https://cdn.branch.io/branch-latest.min.js";k=r.getElementsByTagName(a)[0];k.parentNode.insertBefore(d,k);b[n]=h}})(window,document,"script","branch",function(b,r){b[r]=function(){b._q.push([r,arguments])}},{_q:[],_v:1},"addListener applyCode autoAppIndex banner closeBanner closeJourney creditHistory credits data deepview deepviewCta first getCode init link logout redeem referrals removeListener sendSMS setBranchViewData setIdentity track validateCode trackCommerceEvent logEvent disableTracking".split(" "), 0);
+            (function(a,b,f,d,l,g,h,k,c,e){if(!a[d]||!a[d]._q){for(;k<h.length;)l(g,h[k++]);c=b.createElement(f);c.async=1;c.src="https://cdn.branch.io/branch-latest.min.js";e=b.getElementsByTagName(f)[0];e.parentNode.insertBefore(c,e);a[d]=g}})(window,document,"script","branch",function(a,b){a[b]=function(){a._q.push([b,arguments])}},{_q:[],_v:1},"addListener applyCode banner closeBanner creditHistory credits data deepview deepviewCta first getCode init link logout redeem referrals removeListener sendSMS setBranchViewData setIdentity track validateCode".split(" "),0);
 
-            // Replace this method with whatever mechanism you use to read from data layer
-            var getCampaignKeyCode = function (field) {
-                var href = window.location.href;
-                var reg = new RegExp( '[?&]' + field + '=([^&#]*)', 'i' );
-                var string = reg.exec(href);
-                return string ? string[1] : null;
-            };
+            	var getCampaignKeyCode = function() {
+					return 'abcd';
+				};
 
-            var getPhoneNumber = function() {
-                return phoneNumber.value;
-            };
+				var getPhoneNumber = function() {
+			        var phoneNumber = $('#sms-number-cms').val();
+					return phoneNumber;
+				};
 
-			// Initialize using Live Key
-            branch.init('key_live_bdBS8J74awUMZZZfGjMvBiblzBn2szlP', function(err, data) {
-                keyCode.innerHTML = getCampaignKeyCode("campaignKeyCode");
-            });
+				// Initialize using Live Key
+				branch.init('key_live_bdBS8J74awUMZZZfGjMvBiblzBn2szlP',
+			        function(err, data) {
+			            keyCode.innerHTML = getCampaignKeyCode();
+			        });
 
-            var sendTMTALink = function() {
-                // Insert phone # validation...
-
-                // Send text
-                branch.sendSMS(getPhoneNumber(),
-                {
-                	data: {
-                        '$custom_sms_text': 'This is your custom sms message: {{link}}',
-                        'campaignKeyCode': getCampaignKeyCode("campaignKeyCode")
-                	}
-                }, function(err) {
-                    // Handle the error
-                });
-            }
+				var sendTMTALink = function() {
+                    console.log("Sent SMS");
+					branch.sendSMS(
+						getPhoneNumber(),
+						{
+							data : {
+									'$custom_sms_text' : 'Click here to download SonyRewards {{link}}',
+									'campaignKeyCode' : getCampaignKeyCode()
+								}
+						}, function(err) {
+							console.log(err);
+							alert(err);
+					});
+				};
         </script>
 	</head>
     <body>
-        <div>
-            <h3>Phone Number</h3>
-            <!-- May also want to include some formatting checks -->
-            <input class="example-input" type="tel" id="phoneNumber" placeholder="555-555-5555">
-            <button onclick="sendTMTALink()">Send Me A Link</button>
-        </div>
-        <br/>
-        <div>
-            <h3>Campaign Key Code:</h3>
-            <pre id="keyCode">...</pre>
-        </div>
+        <form data-sly-test="${section.showSmsForm}">
+            <label for="sms-number-cms">Send an SMS</label>
+
+            <input id="sms-number-cms" type="text" class="sms-input-cms" placeholder="555-555-5555" name="number">
+				
+            <button type="submit" class="sms-app-send-link btn btn-primary" onclick="sendTMTALink()">Send</button>
+        </form>
     </body>
 </html>

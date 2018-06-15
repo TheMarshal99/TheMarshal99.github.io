@@ -1,0 +1,127 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script>
+            // can skip google_advertising_id on iOS, and ios_vendor_id on Android. Every other field should be present
+            var _request_body_keys = [ 'session_id', 'identity_id', 'os', 'hardware_id', 'ios_vendor_id', 'hardware_id_type', 'is_hardware_id_real', 'os_version', 'model', 'branch_key', 'device_fingerprint_id', 'sdk', 'google_advertising_id' ];
+
+            function _parseQuery() {
+                var query_string = window.location.search.substring(1);
+                var vars = query_string.split('&');
+                var query = {}
+                for (var i = 0; i < vars.length; i++) {
+                    var pair = vars[i].split('=');
+                    query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+                }
+                return query;
+            }
+
+            // Modify this to include other relevant commerce data.
+            window.branchWebviewInAppPurchase = function(revenue, currency) {    
+                var request_body = { event: 'purchase', commerce_data: { revenue: revenue } };
+                if (currency) { request_body.commerce_data.currency = currency; }
+                var query = _parseQuery();
+
+                for (var i in _request_body_keys) {
+                    var k = _request_body_keys[i];
+
+                    if (query.hasOwnProperty(k)) {
+                        request_body[k] = query[k];
+                    } else if (k !== 'google_advertising_id' && k !== 'ios_vendor_id') {
+                        console.log('missing required field ' + k + '. Should treat as error.');
+                    }
+                }
+
+                var stringified;
+                
+                try {
+                    stringified = JSON.stringify(request_body);
+                }
+                catch(e) {
+                    /* TODO: handle error */
+                    console.error('failed to stringify request_body', e);
+                }
+
+                console.log('request_body:', stringified); // TODO: can remove this console log for production use.
+
+                // Make POST request to https://api.branch.io/v1/event with the response body here.
+                // You are probably best off using whatever request library you already have on the page.
+                // Otherwise you can do the following:
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', 'https://api.branch.io/v1/event');
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.onload = function() { if (xhr.status !== 200) { /* handle error -- purchase was not tracked */ } };
+                xhr.send(stringified);
+            }
+        </script>
+        <!-- iOS Setup -->
+        <!--
+        Step 1: add this line to the imports in Branch.h:
+
+            #import "BNCSystemObserver.h"
+
+        Step 2: anytime after init is complete, grab variables from Branch using the following:
+
+            BNCPreferenceHelper *pref = [BNCPreferenceHelper preferenceHelper];
+            NSString *session_id = pref.sessionID;
+            NSString *identity_id = pref.identityID;
+            NSString *os = [BNCSystemObserver getOS];
+            BOOL is_hardware_id_real;
+            NSString *hardware_id_type;
+            NSString *hardwareId = [BNCSystemObserver getUniqueHardwareId:&is_hardware_id_real
+                                                                  isDebug:pref.isDebug
+                                                                  andType:&hardware_id_type];
+            NSString *ios_vendor_id = [BNCSystemObserver getVendorId];
+            NSString *os_version = [BNCSystemObserver getOSVersion];
+            NSString *model = [BNCSystemObserver getModel];
+            NSString *branch_key = [pref getBranchKey:YES]; // set arg to NO if test app
+            NSString *device_fingerprint_id = pref.deviceFingerprintID;
+            NSString *sdk = BNC_SDK_VERSION;
+
+        Step 3: Append these to the web url when launching the web view:
+
+            ?session_id=[session_id]&identity_id=[identity_id]&os=[os]&hardware_id=[hardwareId]&event=purchase&ios_vendor_id=[ios_vendor_id]&hardware_id_type=[hardware_id_type]&is_hardware_id_real=1&os_version=[os_version]&model=[model]&branch_key=[branch_key]&device_fingerprint_id=[device_fingerprint_id]&sdk=[sdk]
+
+        Note:
+            You'll want to include these in query params when opening page where user can purchase. if the user clicks around, and these are not passed as query params, they will be lost. So in that case, it’s up to you to either always include them as query params, or to store them in a cookie, session storage, or local storage.
+        -->
+
+        <!-- Android Setup -->
+        <!--
+        Step 1: anytime after init is complete, grab variables from Branch using the following:
+
+            PrefHelper pref = PrefHelper.getInstance(getApplicationContext());
+            DeviceInfo info = DeviceInfo.getInstance();
+
+            String session_id = pref.getSessionID();
+            String identity_id = pref.getIdentityID();
+            String os = "Android";
+            boolean is_hardware_id_real = info.isHardwareIDReal();
+            String hardware_id = info.getHardwareID();
+            String google_advertising_id = SystemObserver.GAIDString_;
+            int os_version = android.os.Build.VERSION.SDK_INT;
+            String model = android.os.Build.MODEL;
+            String branch_key = pref.getBranchKey();
+            String device_fingerprint_id = pref.getDeviceFingerPrintID();
+            String sdk = io.branch.referral.BuildConfig.VERSION_NAME;
+
+        Step 2: Append these to the web url when launching the web view:
+
+            ?session_id=[session_id]&identity_id=[identity_id]&os=[os]&hardware_id=[hardware_id]&event=purchase&google_advertising_id=[google_advertising_id]&is_hardware_id_real=1&os_version=[os_version]&model=[model]&branch_key=[branch_key]&device_fingerprint_id=[device_fingerprint_id]&sdk=[sdk]
+
+        Note:
+            You'll want to include these in query params when opening page where user can purchase. if the user clicks around, and these are not passed as query params, they will be lost. So in that case, it’s up to you to either always include them as query params, or to store them in a cookie, session storage, or local storage.
+        -->
+    </head>
+    <!-- For testing -->
+    <body>
+        <a onclick="window.branchWebviewInAppPurchase(50)">Make $50 Purchase</a>
+    </body>
+</html>
+
+
+
+
+<!-- How to call this: ---->
+
+
